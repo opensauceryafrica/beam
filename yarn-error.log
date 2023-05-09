@@ -1,0 +1,36 @@
+Arguments: 
+  /home/magician/.nvm/versions/node/v18.8.0/bin/node /home/magician/.nvm/versions/node/v18.8.0/bin/yarn add @solana/web3.js @metaplex-foundation/js @types/metaplex-foundation/js @types/solana/web3.js
+
+PATH: 
+  /home/magician/.nvm/versions/node/v18.8.0/bin:/home/magician/google-cloud-sdk/bin:/home/magician/.cargo/bin:/home/magician/go/bin:/home/magician/.local/bin:/home/magician/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/magician/julia-1.8.1/bin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  18.8.0
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/@types%2fmetaplex-foundation/js: Request "https://registry.yarnpkg.com/@types%2fmetaplex-foundation/js" returned a 405
+      at params.callback [as _callback] (/home/magician/.nvm/versions/node/v18.8.0/lib/node_modules/yarn/lib/cli.js:66154:18)
+      at self.callback (/home/magician/.nvm/versions/node/v18.8.0/lib/node_modules/yarn/lib/cli.js:140890:22)
+      at Request.emit (node:events:513:28)
+      at Request.<anonymous> (/home/magician/.nvm/versions/node/v18.8.0/lib/node_modules/yarn/lib/cli.js:141862:10)
+      at Request.emit (node:events:513:28)
+      at IncomingMessage.<anonymous> (/home/magician/.nvm/versions/node/v18.8.0/lib/node_modules/yarn/lib/cli.js:141784:12)
+      at Object.onceWrapper (node:events:627:28)
+      at IncomingMessage.emit (node:events:525:35)
+      at endReadableNT (node:internal/streams/readable:1359:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:82:21)
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

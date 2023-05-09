@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "@solana/web3.js": "^1.75.0",
+    "dotenv": "^16.0.3",
+    "mqtt": "^4.3.7",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  },
+  "scripts": {
+    "start": "node ./dist/app.js",
+    "start:build": "yarn build && yarn start",
+    "dev": "npx nodemon",
+    "build": "tsc -p .",
+    "client": "ts-node ./src/client.ts"
+  }
+}
