@@ -1,15 +1,6 @@
 import { config } from 'dotenv';
+import { client } from './mqtt';
 config();
-import env from './env';
-import mqtt from 'mqtt';
-
-const client = mqtt.connect({
-  host: env.MqttHost,
-  port: env.MqttPort,
-  protocol: env.MqttProtocol,
-  username: env.MqttUsername,
-  password: env.MqttPassword,
-});
 
 client.on('connect', () => {
   console.log('MQTT client connected');

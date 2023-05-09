@@ -1,27 +1,33 @@
 import env from './env';
 import { Connection, PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js';
+import { client } from './mqtt';
 
 const solanaConnection = new Connection(env.RPC, {
   wsEndpoint: env.WS,
 });
 
-const sleep = (ms: number) => {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-};
-
-(async () => {
+export const listenForBalanceChange = async (): Promise<number> => {
   const wallet = new PublicKey(env.PublicKey);
-  const subscriptionId = await solanaConnection.onAccountChange(
+  const subscriptionId = solanaConnection.onAccountChange(
     wallet,
-    (updatedAccountInfo) =>
+    (updatedAccountInfo) => {
+      console.log('updatedAccountInfo', updatedAccountInfo);
       console.log(
         `---Event Notification for ${wallet.toString()}--- \nNew Account Balance:`,
         updatedAccountInfo.lamports / LAMPORTS_PER_SOL,
         ' SOL'
-      ),
+      );
+
+      client.publish('balance_change', 'Hello mqtt');
+    },
     'confirmed'
   );
-  console.log('Starting web socket, subscription ID: ', subscriptionId);
-  await sleep(10000); //Wait 10 seconds for Socket Testing
-  await solanaConnection.requestAirdrop(wallet, LAMPORTS_PER_SOL);
-})();
+  return subscriptionId;
+};
+
+export const airdrop = async (): Promise<void> => {
+  await solanaConnection.requestAirdrop(
+    new PublicKey(env.PublicKey),
+    LAMPORTS_PER_SOL
+  );
+};
