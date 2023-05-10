@@ -4,10 +4,6 @@ RUN apk add --no-cache git openssh
 
 RUN mkdir /app
 
-ARG PORT
-
-ENV PORT $PORT
-
 WORKDIR /app
 
 COPY yarn*.lock ./
@@ -23,7 +19,5 @@ COPY tsconfig.json ./
 COPY . ./
 
 RUN yarn build
-
-EXPOSE $PORT
 
 CMD ["yarn", "start"]
