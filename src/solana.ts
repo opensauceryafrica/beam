@@ -11,14 +11,30 @@ export const listenForBalanceChange = async (): Promise<number> => {
   const subscriptionId = solanaConnection.onAccountChange(
     wallet,
     (updatedAccountInfo) => {
-      console.log('updatedAccountInfo', updatedAccountInfo);
       console.log(
-        `---Event Notification for ${wallet.toString()}--- \nNew Account Balance:`,
+        `Event Notification for ${wallet.toString()} --- New Account Balance:`,
         updatedAccountInfo.lamports / LAMPORTS_PER_SOL,
         ' SOL'
       );
 
-      client.publish('balance_change', 'Hello mqtt');
+      const balance = updatedAccountInfo.lamports / LAMPORTS_PER_SOL;
+
+      if (balance === 0) {
+        client.publish(
+          'balance_empty',
+          `Your meter balance is empty: ${balance} SOL`
+        );
+      } else if (balance < 0.05) {
+        client.publish(
+          'balance_low',
+          `Your meter balance is low: ${balance} SOL`
+        );
+      } else {
+        client.publish(
+          'balance_change',
+          `Your meter balance ok: ${balance} SOL`
+        );
+      }
     },
     'confirmed'
   );

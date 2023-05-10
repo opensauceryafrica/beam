@@ -1,5 +1,3 @@
-import { config } from 'dotenv';
-config();
 import * as solana from './solana';
 import { client } from './mqtt';
 

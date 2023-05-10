@@ -1,3 +1,5 @@
+import { config } from 'dotenv';
+config();
 interface IENV {
   Port: string | number;
   RPC: string;
