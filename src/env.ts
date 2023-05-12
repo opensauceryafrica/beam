@@ -9,6 +9,7 @@ interface IENV {
   MqttProtocol: 'mqtts' | 'mqtt';
   MqttUsername: string;
   MqttPassword: string;
+  MqttClientId?: string;
   PublicKey: string;
 }
 
@@ -22,6 +23,7 @@ var env: IENV = {
   MqttUsername: process.env.MQTT_USERNAME || 'opensaucerer',
   MqttPassword: process.env.MQTT_PASSWORD || '<your_password>',
   PublicKey: process.env.PUBLIC_KEY || '',
+  MqttClientId: process.env.MQTT_CLIENT_ID || 'mqttjs_34f95deb',
 };
 
 export default env;

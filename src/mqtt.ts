@@ -7,4 +7,5 @@ export const client = mqtt.connect({
   protocol: env.MqttProtocol,
   username: env.MqttUsername,
   password: env.MqttPassword,
+  clientId: env.MqttClientId,
 });
