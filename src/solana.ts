@@ -10,7 +10,7 @@ export const listenForBalanceChange = async (): Promise<number> => {
   const wallet = new PublicKey(env.PublicKey);
   const subscriptionId = solanaConnection.onAccountChange(
     wallet,
-    (updatedAccountInfo) => {
+    async (updatedAccountInfo) => {
       console.log(
         `Event Notification for ${wallet.toString()} --- New Account Balance:`,
         updatedAccountInfo.lamports / LAMPORTS_PER_SOL,
@@ -19,22 +19,7 @@ export const listenForBalanceChange = async (): Promise<number> => {
 
       const balance = updatedAccountInfo.lamports / LAMPORTS_PER_SOL;
 
-      if (balance === 0) {
-        client.publish(
-          'balance_empty',
-          `Your meter balance is empty: ${balance} SOL`
-        );
-      } else if (balance < 0.05) {
-        client.publish(
-          'balance_low',
-          `Your meter balance is low: ${balance} SOL`
-        );
-      } else {
-        client.publish(
-          'balance_change',
-          `Your meter balance ok: ${balance} SOL`
-        );
-      }
+      await sendSignalForBalanceChange(balance);
     },
     'confirmed'
   );
@@ -46,4 +31,25 @@ export const airdrop = async (): Promise<void> => {
     new PublicKey(env.PublicKey),
     LAMPORTS_PER_SOL
   );
+};
+
+export const walletBalance = async (): Promise<number> => {
+  const wallet = new PublicKey(env.PublicKey);
+  const balance = await solanaConnection.getBalance(wallet);
+  return balance / LAMPORTS_PER_SOL;
+};
+
+export const sendSignalForBalanceChange = async (
+  balance: number
+): Promise<void> => {
+  if (balance === 0) {
+    client.publish(
+      'balance_empty',
+      `Your meter balance is empty: ${balance} SOL`
+    );
+  } else if (balance < 0.05) {
+    client.publish('balance_low', `Your meter balance is low: ${balance} SOL`);
+  } else {
+    client.publish('balance_change', `Your meter balance ok: ${balance} SOL`);
+  }
 };
