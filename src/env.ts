@@ -6,11 +6,14 @@ interface IENV {
   WS: string;
   MqttHost: string;
   MqttPort: number;
-  MqttProtocol: 'mqtts' | 'mqtt';
+  MqttProtocol: 'mqtt' | 'mqtts';
   MqttUsername: string;
   MqttPassword: string;
   MqttClientId?: string;
   PublicKey: string;
+  PrivateKey: string;
+  FeePublicKey: string;
+  Fee: number;
 }
 
 var env: IENV = {
@@ -24,6 +27,9 @@ var env: IENV = {
   MqttPassword: process.env.MQTT_PASSWORD || '<your_password>',
   PublicKey: process.env.PUBLIC_KEY || '',
   MqttClientId: process.env.MQTT_CLIENT_ID || 'mqttjs_34f95deb',
+  PrivateKey: process.env.PRIVATE_KEY || '',
+  FeePublicKey: process.env.FEE_PUBLIC_KEY || '',
+  Fee: Number(process.env.FEE) || 0.001,
 };
 
 export default env;
