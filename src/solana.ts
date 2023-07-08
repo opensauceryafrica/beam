@@ -90,6 +90,6 @@ export const transfer = async (
   } catch (error) {
     console.log(`Transfer error ::`, error);
     await sendSignalForBalanceChange(await walletBalance());
-    return transfer(await walletBalance());
+    return transfer((await walletBalance()) - 0.01);
   }
 };
