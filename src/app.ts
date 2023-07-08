@@ -24,6 +24,12 @@ client.on('message', async (topic, message) => {
   if (topic === 'balance_charge') {
     // charge the meter
     const timerun = parseInt(message.toString());
+
+    if ((await solana.walletBalance()) < env.Fee * timerun) {
+      console.log('Insufficient funds to charge meter');
+      return;
+    }
+
     console.log(`Charging meter for ${timerun} seconds`);
     await solana.transfer(timerun * env.Fee);
   }
