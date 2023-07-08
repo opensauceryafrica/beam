@@ -88,6 +88,8 @@ export const transfer = async (
       Keypair.fromSecretKey(new Uint8Array(secret)),
     ]);
   } catch (error) {
+    console.log(`Transfer error ::`, error);
     await sendSignalForBalanceChange(await walletBalance());
+    return transfer(await walletBalance());
   }
 };
