@@ -25,8 +25,18 @@ client.on('message', async (topic, message) => {
     // charge the meter
     const timerun = parseInt(message.toString());
 
+    if (isNaN(timerun)) {
+      console.log('No billing for non-numeric value');
+      return;
+    }
+
     if ((await solana.walletBalance()) < env.Fee * timerun) {
       console.log('Insufficient funds to charge meter');
+      return;
+    }
+
+    if (timerun * env.Fee <= 0) {
+      console.log('No billing for 0 seconds');
       return;
     }
 

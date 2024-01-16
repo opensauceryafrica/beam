@@ -20,13 +20,11 @@ export const listenForBalanceChange = async (): Promise<number> => {
   const subscriptionId = solanaConnection.onAccountChange(
     wallet,
     async (updatedAccountInfo) => {
-      console.log(
-        `Event Notification for ${wallet.toString()} --- New Account Balance:`,
-        updatedAccountInfo.lamports / LAMPORTS_PER_SOL,
-        ' SOL'
+      const balance = parseFloat(
+        (updatedAccountInfo.lamports / LAMPORTS_PER_SOL).toFixed(3)
       );
 
-      const balance = updatedAccountInfo.lamports / LAMPORTS_PER_SOL;
+      console.log(`New Account Balance:`, balance, ' SOL');
 
       await sendSignalForBalanceChange(balance);
     },
@@ -45,21 +43,20 @@ export const airdrop = async (): Promise<void> => {
 export const walletBalance = async (): Promise<number> => {
   const wallet = new PublicKey(env.PublicKey);
   const balance = await solanaConnection.getBalance(wallet);
-  return balance / LAMPORTS_PER_SOL;
+  return parseFloat((balance / LAMPORTS_PER_SOL).toFixed(3));
 };
 
 export const sendSignalForBalanceChange = async (
   balance: number
 ): Promise<void> => {
   if (balance <= 0.01) {
-    client.publish(
-      'balance_empty',
-      `Your meter balance is empty: ${balance} SOL`
-    );
+    // assume the balance as 0`
+    balance = 0.0;
+    client.publish('balance_empty', balance.toString());
   } else if (balance < 0.05) {
-    client.publish('balance_low', `Your meter balance is low: ${balance} SOL`);
+    client.publish('balance_low', balance.toString());
   } else {
-    client.publish('balance_change', `Your meter balance ok: ${balance} SOL`);
+    client.publish('balance_change', balance.toString());
   }
 };
 
@@ -88,8 +85,8 @@ export const transfer = async (
       Keypair.fromSecretKey(new Uint8Array(secret)),
     ]);
   } catch (error) {
-    console.log(`Transfer error ::`, error);
+    // console.log(`Transfer error ::`, error);
     await sendSignalForBalanceChange(await walletBalance());
-    return transfer((await walletBalance()) - 0.01);
+    // return transfer((await walletBalance()) - 0.01);
   }
 };
