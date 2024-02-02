@@ -15,6 +15,8 @@ client.on('error', (error) => {
 });
 
 client.on('message', async (topic, message) => {
+  // await solana.airdrop();
+
   console.log('MQTT message received:', topic, message.toString());
   if (topic === 'get_balance') {
     const balance = await solana.walletBalance();
@@ -23,25 +25,36 @@ client.on('message', async (topic, message) => {
 
   if (topic === 'balance_charge') {
     // charge the meter
-    const timerun = parseInt(message.toString());
-
-    if (isNaN(timerun)) {
+    const energy = (parseFloat(message.toString()) / 1000) * (5 / 60 / 60); // convert 5 seconds to hours (5/60/60)
+    if (isNaN(energy)) {
       console.log('No billing for non-numeric value');
       return;
     }
 
-    if ((await solana.walletBalance()) < env.Fee * timerun) {
+    if ((await solana.walletBalance()) < env.Fee * energy) {
       console.log('Insufficient funds to charge meter');
+      const balance = 0.0;
+      client.publish('balance_empty', balance.toString());
       return;
     }
 
-    if (timerun * env.Fee <= 0) {
-      console.log('No billing for 0 seconds');
+    if (energy * env.Fee <= 0) {
+      console.log('No billing for 0 kwh');
       return;
     }
 
-    console.log(`Charging meter for ${timerun} seconds`);
-    await solana.transfer(timerun * env.Fee);
+    console.log(`Charging meter ${energy * env.Fee} for ${energy} kwh`);
+
+    /*
+
+      1 unit = 1 kwh = 1000 watts * 1 hour
+
+      total units consumed over 5 seconds = (energy * 1 unit) / 1 kwh
+
+      bill = total units consumed * fee (tarrif)
+    */
+
+    await solana.transfer(energy * env.Fee);
   }
 });
 

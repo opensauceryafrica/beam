@@ -76,7 +76,7 @@ export const transfer = async (
       SystemProgram.transfer({
         fromPubkey: Keypair.fromSecretKey(new Uint8Array(secret)).publicKey,
         toPubkey: new PublicKey(destination),
-        lamports: amount * LAMPORTS_PER_SOL,
+        lamports: parseInt((amount * LAMPORTS_PER_SOL).toString()),
       })
     );
 
