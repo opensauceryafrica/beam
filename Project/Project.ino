@@ -12,8 +12,8 @@
 //-----------------------------------------------------------------------------------
 
 //--------------------------------- Wifi Details ------------------------------------
-const char* WIFI_SSID = "Engineer-D";//"Perfection\'s Pixel 7 Pro";
-const char* WIFI_PASSWORD = "Dheeeeey"; //"pythonbite";
+const char* WIFI_SSID = "Perfection Pixel 7 Pro";//"Perfection\'s Pixel 7 Pro";
+const char* WIFI_PASSWORD = "pythonbite"; //"pythonbite";
 //-----------------------------------------------------------------------------------
 
 //----------------------------- MQTT Variable ---------------------------------------
@@ -356,7 +356,7 @@ void readPZEM()
 //============================== Read PZEM and Display Values ===========================
 void displayPZEM(const MeasurementData& measurement)
 {
-  if (measurement.voltage != NAN) {
+  if (!isnan(measurement.voltage)) {
     display.setFont(ArialMT_Plain_16);
     display.setTextAlignment(TEXT_ALIGN_LEFT);
     display.drawString(0, 15, "Voltage: " + String(measurement.voltage) + "V");
@@ -364,10 +364,10 @@ void displayPZEM(const MeasurementData& measurement)
   else {
     display.setFont(ArialMT_Plain_16);
     display.setTextAlignment(TEXT_ALIGN_LEFT);
-    display.drawString(0, 20,F("Error reading voltage"));
+    display.drawString(0, 15,F("Voltage: 0.00V"));
   }
 
-  if (measurement.current != NAN) {
+  if (!isnan(measurement.current)) {
     //--------------- Dislay Current
     display.setFont(ArialMT_Plain_16);
     display.setTextAlignment(TEXT_ALIGN_LEFT);
@@ -378,7 +378,9 @@ void displayPZEM(const MeasurementData& measurement)
   else {
     display.setFont(ArialMT_Plain_16);
     display.setTextAlignment(TEXT_ALIGN_LEFT);
-    display.drawString(0, 40,F("Error reading Parameters"));
+    display.drawString(0, 30, "Current: 0.00A");
+    //--------------- Diplay power
+    display.drawString(0, 45, "Power: 0.00W");
   }
   display.display();
 }
